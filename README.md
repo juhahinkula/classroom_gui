@@ -1,4 +1,4 @@
-**GUI for Github Classroom** 
+# GUI for Github Classroom 
 
 To be fixed: 
 - Organization is read from the `.env` file. Should be dynamically fetched.
