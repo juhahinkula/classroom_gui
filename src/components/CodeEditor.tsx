@@ -8,7 +8,6 @@ import Stack from '@mui/material/Stack';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
-import { styled } from '@mui/material/styles';
 import { createHtmlCode, transpileTsxToJsx } from '../utils';
 import SaveIcon from '@mui/icons-material/Save';
 import GithubRepoTree from './GithubRepoTree';
