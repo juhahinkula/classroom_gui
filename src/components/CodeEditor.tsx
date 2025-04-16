@@ -15,6 +15,7 @@ type CodeEditorProps = {
   open: boolean;
   onClose: () => void;
   code: string;
+  repositoryUrl: string;
 }
 
 const StyledDialogContent = styled(DialogContent)({
@@ -24,7 +25,7 @@ const StyledDialogContent = styled(DialogContent)({
   overflow: 'hidden'
 });
 
-function CodeEditor({ open, onClose, code }: CodeEditorProps) {
+function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
   const [editorCode, setEditorCode] = useState(code);
   const [isHtmlMode, setIsHtmlMode] = useState(false);
   const [fileName, setFileName] = useState("student-code.tsx");
@@ -72,7 +73,7 @@ function CodeEditor({ open, onClose, code }: CodeEditorProps) {
       fullWidth
     >
       <DialogTitle>
-        Student Code
+        Student Code: {repositoryUrl}
       </DialogTitle>
       <StyledDialogContent>
         <CodeMirror

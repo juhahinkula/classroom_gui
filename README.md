@@ -1,7 +1,10 @@
 # GUI for Github Classroom 
 
-To be fixed: 
-- Organization is read from the `.env` file. Should be dynamically fetched.
+GUI for teachers to display classrooms, assignments, and student submissions. 
+
+### Features to Improve:
+- Dynamically fetch the organization name from the GitHub API instead of relying on the `.env` file.
+- Error handling for invalid or expired GitHub tokens.
 
 ## Getting Started
 

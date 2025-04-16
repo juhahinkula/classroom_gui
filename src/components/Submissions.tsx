@@ -7,39 +7,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeEditor from './CodeEditor';
-
-type Student = {
-  id: number,
-  login: string;
-  name: string;
-  avatar_url: string;
-  html_url: string
-}
-
-type SubmissionResponse = {
-  id: number;
-  submitted: boolean;
-  passing: boolean;
-  commit_count: number;
-  grade: number | null;
-  students: Student[],
-  repository: {
-    id: number;
-    name: string;
-    full_name: string;
-    html_url: string;
-    private: boolean;
-    default_branch: string;
-  }
-}
-
-type Submission = {
-  id: string;
-  repository: string;
-  repositoryName: string;
-  studentName: string;
-  studentLogin: string;
-}
+import { Submission, SubmissionResponse } from '../types';
 
 export default function Submissions() {
   const params = useParams();
@@ -50,6 +18,7 @@ export default function Submissions() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showCodeEditor, setShowCodeEditor] = useState(false);
+  const [repositoryUrl, setRepositoryUrl] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const [path, setPath] = useState(import.meta.env.VITE_PATH_NAME);
 
@@ -98,6 +67,7 @@ export default function Submissions() {
           size="small"
           onClick={() => {
             fetchFileContent(params.row.repositoryName)
+              .then(() => setRepositoryUrl(params.row.repository))
               .then(() => setShowCodeEditor(true));
           }}
         >
@@ -147,11 +117,11 @@ export default function Submissions() {
     });
   }, [assignmentId, token]);
 
-  function fetchFileContent(repo_name: string) {  
+  function fetchFileContent(repo_name: string, filePath?: string) {  
     const owner = import.meta.env.VITE_OWNER_ORGANIZATION;
     const branch = 'main';
-    const url = `https://api.github.com/repos/${owner}/${repo_name}/contents/${path}?ref=${branch}`;
-    
+    const pathToFetch = filePath || path;
+    const url = `https://api.github.com/repos/${owner}/${repo_name}/contents/${pathToFetch}?ref=${branch}`;
     return fetch(url, 
       { 
         headers: {
@@ -211,7 +181,12 @@ export default function Submissions() {
           </div>
         </>
       )}    
-      <CodeEditor open={showCodeEditor} onClose={closeCodeEditor} code={studentCode} />
+      <CodeEditor 
+        open={showCodeEditor} 
+        onClose={closeCodeEditor} 
+        code={studentCode}
+        repositoryUrl={repositoryUrl}
+      />
     </div>
   );
 }
