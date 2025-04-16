@@ -1,13 +1,13 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeEditor from './CodeEditor';
 import { Submission, SubmissionResponse } from '../types';
+import { useNavigate } from "react-router";
 
 export default function Submissions() {
   const params = useParams();
@@ -23,6 +23,8 @@ export default function Submissions() {
   const [path, setPath] = useState(import.meta.env.VITE_PATH_NAME);
 
   const token = import.meta.env.VITE_GITHUB_TOKEN;
+
+  const navigate = useNavigate();
 
   const columns: GridColDef[] = [
     { 
@@ -153,19 +155,22 @@ export default function Submissions() {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="submissions-container">
-      <h1>Assignment Submissions</h1>
-      <h3>Classroom ID: {classroomId} | Assignment ID: {assignmentId}</h3>
-      
+    <div className="submissions-container">   
+      <h3>Assignment Submissions: Classroom ID {classroomId} | Assignment ID {assignmentId}</h3>
+        
       {submissions.length === 0 ? (
         <p>No submissions found.</p>
       ) : (
         <>
-          <TextField 
-            label="File path"
-            value={path}
-            onChange={event => setPath(event.target.value)}
-          />
+          <Stack mb={2} spacing={2} alignItems="flex-start">
+            <Button onClick={() => navigate(-1)}>Back</Button>
+            <TextField
+              sx={{ width: 300}} 
+              label="File path"
+              value={path}
+              onChange={event => setPath(event.target.value)}
+            />
+          </Stack>
           <div style={{ height: 400, width: '90%' }}>
             <DataGrid
               rows={submissions}

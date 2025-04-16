@@ -4,12 +4,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { styled } from '@mui/material/styles';
 import { createHtmlCode, transpileTsxToJsx } from '../utils';
 import SaveIcon from '@mui/icons-material/Save';
+import GithubRepoTree from './GithubRepoTree';
 
 type CodeEditorProps = {
   open: boolean;
@@ -17,13 +19,6 @@ type CodeEditorProps = {
   code: string;
   repositoryUrl: string;
 }
-
-const StyledDialogContent = styled(DialogContent)({
-  width: '800px',
-  height: '600px',
-  padding: 0,
-  overflow: 'hidden'
-});
 
 function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
   const [editorCode, setEditorCode] = useState(code);
@@ -73,18 +68,32 @@ function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
       fullWidth
     >
       <DialogTitle>
-        Student Code: {repositoryUrl}
+        Student Code
       </DialogTitle>
-      <StyledDialogContent>
-        <CodeMirror
-          value={editorCode}
-          height="100%"
-          theme="dark"
-          extensions={[isHtmlMode ? html() : javascript({ jsx: true })]}
-          onChange={(value) => setEditorCode(value)}
-          editable={true}
-        />
-      </StyledDialogContent>
+      <DialogContent sx={{ height: '90%' }}>
+        <Stack 
+          flexDirection="row" 
+          spacing={2} 
+          sx={{ 
+            height: '100%', 
+            width: '100%', 
+          }}
+        >
+          <GithubRepoTree 
+            repoUrl={repositoryUrl} 
+          />
+          <CodeMirror
+            value={editorCode}
+            height="100%"
+            width="90%"
+            theme="light"
+            extensions={[isHtmlMode ? html() : javascript({ jsx: true })]}
+            onChange={(value) => setEditorCode(value)}
+            editable={true}
+            style={{ flex: 3 }}
+          />
+        </Stack>
+      </DialogContent>
       <DialogActions>
         {
           import.meta.env.VITE_TS_MODE == "true" &&
