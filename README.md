@@ -23,7 +23,8 @@ VITE_OWNER_ORGANIZATION=[Organization login of your classrooms]
 VITE_PATH_NAME=src/App.tsx
 VITE_TS_MODE=false
 ```
-Note! `VITE_TS_MODE` is a special setting for internal purposes. It allows to transpile TypeScript React component ot JavaScript and open it in browser (value=true).
+- `VITE_TS_MODE` is a special setting for internal purposes. It allows to transpile TypeScript React component ot JavaScript and open it in browser (value=true).
+- `VITE_PATH_NAME` is the file that will be opened in the code editor by default.
 
 ### run the project
 ```
