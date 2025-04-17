@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { CircularProgress } from '@mui/material';
+import { fetchFileContent } from '../api';
 
 interface GithubRepoTreeProps {
   repoUrl: string;
+  setSourceCode: (code: string) => void;
 }
 
 interface TreeNode {
@@ -15,7 +17,7 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-function GithubRepoTree({ repoUrl }: GithubRepoTreeProps) {
+function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -74,9 +76,19 @@ function GithubRepoTree({ repoUrl }: GithubRepoTreeProps) {
     fetchRepoTree();
   }, [repoUrl]);
 
+    const getSourceCode = (codeUrl: string) => {
+      console.log(repoUrl + "/" + codeUrl);
+      // Get repository name here !!!
+      fetchFileContent("react-component-juhahinkula", codeUrl)
+      .then(data => {
+        const content = atob(data.content);
+        setSourceCode(content);
+      })
+    }
+  
   const renderTree = (nodes: TreeNode[]) =>
     nodes.map((node) => (
-      <TreeItem key={node.path} itemId={node.path} label={node.name}>
+      <TreeItem onClick={() => getSourceCode(node.path)} key={node.path} itemId={node.path} label={node.name}>
         {node.children && renderTree(node.children)}
       </TreeItem>
     ));

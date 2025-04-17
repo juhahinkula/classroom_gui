@@ -1,26 +1,17 @@
-import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useParams, useNavigate } from 'react-router';
 import Button from '@mui/material/Button';
-
-type Assignment = {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-  createdAt: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import { fetchAssignments } from '../api';
 
 function Assignments() {
   const { classroomId } = useParams<{ classroomId: string }>();
   const navigate = useNavigate();
 
-  console.log(classroomId);
-
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const token = import.meta.env.VITE_GITHUB_TOKEN;
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['assignments'], 
+    queryFn: () => fetchAssignments(classroomId!)
+  });  
 
   const columns: GridColDef[] = [
     { 
@@ -48,46 +39,19 @@ function Assignments() {
     }
   ];
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`https://api.github.com/classrooms/${classroomId}/assignments`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github.classroom-preview+json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) 
-        throw new Error('Failed to fetch assignments');
-        
-      return response.json();
-    })
-    .then(data => {
-      setAssignments(data);
-      setError(null);
-    })
-    .catch(err => {
-      console.error('Error fetching assignments:', err);
-      setError('Failed to load assignment');
-    })
-    .finally(() => {
-      setLoading(false);
-    })}
-  , [classroomId, token])
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (isPending) return <div>Loading...</div>;
+  if (isError) return <div className="error">{error.message}</div>;
 
   return (
     <div className="classrooms-container">
       <h1>GitHub Assignments: {classroomId}</h1>
       
-      {assignments.length === 0 ? (
+      {data.length === 0 ? (
         <p>No assignments found.</p>
       ) : (
         <div style={{ height: 400, width: '90%' }}>
           <DataGrid
-            rows={assignments}
+            rows={data}
             columns={columns}
             pageSizeOptions={[5, 10, 25]}
             initialState={{

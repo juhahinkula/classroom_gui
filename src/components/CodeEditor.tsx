@@ -10,7 +10,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { createHtmlCode, transpileTsxToJsx } from '../utils';
 import SaveIcon from '@mui/icons-material/Save';
-import GithubRepoTree from './GithubRepoTree';
+import GithubRepoTree from './GitHubRepoTree';
 
 type CodeEditorProps = {
   open: boolean;
@@ -37,6 +37,10 @@ function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
     setIsHtmlMode(true);
     setFileName("student-code.html");
   };
+
+  const setSourceCode = (code: string) => {
+    setEditorCode(code);  
+  }
 
   const changeTsCode = () => {
     setEditorCode(code);
@@ -80,6 +84,7 @@ function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
         >
           <GithubRepoTree 
             repoUrl={repositoryUrl} 
+            setSourceCode={setSourceCode}
           />
           <CodeMirror
             value={editorCode}

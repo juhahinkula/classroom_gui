@@ -1,3 +1,20 @@
+export type Classroom = {
+  id: number;
+  name: string;
+  archived: boolean;
+  url: string;
+  organization_name: string;
+  created_at: string;
+}
+
+export type Assignment = {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  createdAt: string;
+}
+
 export type Student = {
   id: number,
   login: string;

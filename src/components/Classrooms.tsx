@@ -1,26 +1,18 @@
-import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Button  from '@mui/material/Button';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useNavigate } from 'react-router';
-
-type Classroom = {
-  id: number;
-  name: string;
-  archived: boolean;
-  url: string;
-  organization_name: string;
-  created_at: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import { fetchClassrooms } from '../api';
 
 function Classrooms() {
-  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
   const navigate = useNavigate();
 
-  const token = import.meta.env.VITE_GITHUB_TOKEN;
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['classrooms'], 
+    queryFn: fetchClassrooms
+  });  
+
   const columns: GridColDef[] = [
     { 
       field: 'id', 
@@ -71,43 +63,19 @@ function Classrooms() {
     }
   ];
 
-  useEffect(() => {   
-    fetch('https://api.github.com/classrooms', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github.classroom-preview+json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      setClassrooms(data);
-      setLoading(false);
-    })
-    .catch(err => {
-      setError("Failed to fetch classrooms. Please check your API token and permissions.");
-      setLoading(false);
-      console.error(err);
-    });
-  }, [token]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (isPending) return <div>Loading...</div>;
+  if (isError) return <div className="error">{error.message}</div>;
 
   return (
     <div className="classrooms-container">
       <h1>GitHub Classrooms</h1>
       
-      {classrooms.length === 0 ? (
+      {data.length === 0 ? (
         <p>No classrooms found.</p>
       ) : (
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={classrooms}
+            rows={data}
             columns={columns}
             pageSizeOptions={[5, 10, 25]}
             initialState={{

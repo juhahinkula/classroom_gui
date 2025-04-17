@@ -8,6 +8,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeEditor from './CodeEditor';
 import { Submission, SubmissionResponse } from '../types';
 import { useNavigate } from "react-router";
+import { fetchFileContent } from '../api';
 
 export default function Submissions() {
   const params = useParams();
@@ -68,9 +69,9 @@ export default function Submissions() {
           variant="text"
           size="small"
           onClick={() => {
-            fetchFileContent(params.row.repositoryName)
-              .then(() => setRepositoryUrl(params.row.repository))
-              .then(() => setShowCodeEditor(true));
+            getFileContent(params.row.repositoryName);
+            setRepositoryUrl(params.row.repository);
+            setShowCodeEditor(true);
           }}
         >
           Code
@@ -119,24 +120,8 @@ export default function Submissions() {
     });
   }, [assignmentId, token]);
 
-  function fetchFileContent(repo_name: string, filePath?: string) {  
-    const owner = import.meta.env.VITE_OWNER_ORGANIZATION;
-    const branch = 'main';
-    const pathToFetch = filePath || path;
-    const url = `https://api.github.com/repos/${owner}/${repo_name}/contents/${pathToFetch}?ref=${branch}`;
-    return fetch(url, 
-      { 
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Github API error: ${response.status}`);
-        }
-        return response.json();
-      })
+  function getFileContent(repo_name: string, filePath?: string) {  
+      fetchFileContent(repo_name, filePath)
       .then(data => {
         const content = atob(data.content);
         setStudentCode(content);

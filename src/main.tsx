@@ -5,6 +5,9 @@ import App from './App.tsx'
 import Classrooms from './components/Classrooms.tsx';
 import Assignments from './components/Assignments.tsx';
 import Submissions from './components/Submissions.tsx';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -29,6 +32,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}/>
+    </QueryClientProvider>
   </StrictMode>,
 )
