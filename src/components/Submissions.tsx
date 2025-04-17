@@ -97,6 +97,7 @@ export default function Submissions() {
   ];
 
   function getFileContent(repo_name: string, filePath?: string) {  
+    if (filePath) {  
       fetchFileContent(repo_name, filePath)
       .then(data => {
         const content = atob(data.content);
@@ -106,6 +107,7 @@ export default function Submissions() {
         console.error('Error fetching file content:', error);
         throw error;
       });
+    }
   }  
 
   const closeCodeEditor = () => {
@@ -113,10 +115,7 @@ export default function Submissions() {
   }
 
   if (isPending) return <div>Loading submissions...</div>;
-  if (isError) {
-    console.log(error.message);
-    return <div className="error">{error.message}</div>;
-  }
+  if (isError) return <div className="error">{error.message}</div>;
 
   return (
     <div className="submissions-container">   

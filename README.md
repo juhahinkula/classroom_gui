@@ -27,6 +27,6 @@ VITE_TS_MODE=false
 - `VITE_PATH_NAME` specifies the default file to be opened in the code editor.
 
 ### run the project
-```
+```bash
 npm run dev
 ```

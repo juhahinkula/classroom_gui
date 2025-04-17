@@ -77,8 +77,7 @@ function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
   }, [repoUrl]);
 
     const getSourceCode = (codeUrl: string) => {
-      console.log(repoUrl + "/" + codeUrl);
-      // Get repository name here !!!
+      // TODO: Get repository name here
       fetchFileContent("react-component-juhahinkula", codeUrl)
       .then(data => {
         const content = atob(data.content);
@@ -96,8 +95,6 @@ function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
   if (loading) {
     return <CircularProgress />;
   }
-
-  console.log(treeData);
 
   return (
     <SimpleTreeView>
