@@ -23,8 +23,8 @@ VITE_OWNER_ORGANIZATION=[Organization login of your classrooms]
 VITE_PATH_NAME=src/App.tsx
 VITE_TS_MODE=false
 ```
-- `VITE_TS_MODE` is a special setting for internal purposes. It allows to transpile TypeScript React component ot JavaScript and open it in browser (value=true).
-- `VITE_PATH_NAME` specifies the default file to be opened in the code editor.
+- `VITE_TS_MODE` is an internal configuration used for development purposes. When set to `true`, it enables the transpilation of TypeScript React components into JavaScript, allowing them to be opened directly in the browser.
+- `VITE_PATH_NAME` defines the default file to be opened in the code editor. This can be left empty, allowing you to manually select a file from the file tree instead.
 
 ### run the project
 ```bash
