@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import Button from '@mui/material/Button';
@@ -6,26 +6,42 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeEditor from './CodeEditor';
-import { Submission, SubmissionResponse } from '../types';
+import { SubmissionResponse } from '../types';
 import { useNavigate } from "react-router";
 import { fetchFileContent } from '../api';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSubmissions } from '../api';
 
 export default function Submissions() {
   const params = useParams();
   const classroomId = params.classroomId as string;
   const assignmentId = params.assignmentId as string;
 
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [showCodeEditor, setShowCodeEditor] = useState(false);
   const [repositoryUrl, setRepositoryUrl] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const [path, setPath] = useState(import.meta.env.VITE_PATH_NAME);
 
-  const token = import.meta.env.VITE_GITHUB_TOKEN;
-
   const navigate = useNavigate();
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['assignments', assignmentId], 
+    queryFn: () => fetchSubmissions(assignmentId),
+    select: (data) => {
+        const items = data.map(
+          (submission: SubmissionResponse) => ({
+            ...submission,
+            repository: submission.repository.html_url,
+            repositoryName: submission.repository.name,
+            studentName: submission.students && submission.students.length > 0 ? 
+                        submission.students[0].name : null,
+            studentLogin: submission.students && submission.students.length > 0 ? 
+                          submission.students[0].login : null
+          })
+        );
+        return items;
+      }  
+  });  
 
   const columns: GridColDef[] = [
     { 
@@ -80,46 +96,6 @@ export default function Submissions() {
     }
   ];
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`https://api.github.com/assignments/${assignmentId}/accepted_assignments`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github+json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) 
-        throw new Error('Failed to fetch submissions');
-        
-      return response.json();
-    })
-    .then(data => {
-      const flattenedData: Submission[] = data.map((submission: SubmissionResponse)  => {
-        return {
-          ...submission,
-          repository: submission.repository.html_url,
-          repositoryName: submission.repository.name,
-          studentName: submission.students && submission.students.length > 0 ? 
-                       submission.students[0].name : null,
-          studentLogin: submission.students && submission.students.length > 0 ? 
-                        submission.students[0].login : null
- 
-        };
-      });
-    
-      setSubmissions(flattenedData);
-      setError(null);
-    })
-    .catch(err => {
-      console.error('Error fetching submissions:', err);
-      setError('Failed to load submissions');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }, [assignmentId, token]);
-
   function getFileContent(repo_name: string, filePath?: string) {  
       fetchFileContent(repo_name, filePath)
       .then(data => {
@@ -136,14 +112,17 @@ export default function Submissions() {
     setShowCodeEditor(false);
   }
 
-  if (loading) return <div>Loading submissions...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (isPending) return <div>Loading submissions...</div>;
+  if (isError) {
+    console.log(error.message);
+    return <div className="error">{error.message}</div>;
+  }
 
   return (
     <div className="submissions-container">   
       <h3>Assignment Submissions: Classroom ID {classroomId} | Assignment ID {assignmentId}</h3>
         
-      {submissions.length === 0 ? (
+      {data.length === 0 ? (
         <p>No submissions found.</p>
       ) : (
         <>
@@ -158,7 +137,7 @@ export default function Submissions() {
           </Stack>
           <div style={{ height: 400, width: '90%' }}>
             <DataGrid
-              rows={submissions}
+              rows={data}
               columns={columns}
               pageSizeOptions={[5, 10, 25]}
               initialState={{

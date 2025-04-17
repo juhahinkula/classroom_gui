@@ -39,7 +39,7 @@ function Assignments() {
     }
   ];
 
-  if (isPending) return <div>Loading...</div>;
+  if (isPending) return <div>Loading assignments...</div>;
   if (isError) return <div className="error">{error.message}</div>;
 
   return (

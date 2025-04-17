@@ -63,7 +63,7 @@ function Classrooms() {
     }
   ];
 
-  if (isPending) return <div>Loading...</div>;
+  if (isPending) return <div>Loading classrooms...</div>;
   if (isError) return <div className="error">{error.message}</div>;
 
   return (

@@ -1,4 +1,4 @@
-import { Classroom } from "./types";
+import { Assignment, Classroom } from "./types";
 
 const token = import.meta.env.VITE_GITHUB_TOKEN;
 
@@ -17,7 +17,8 @@ export const fetchClassrooms = (): Promise<Classroom[]> => {
   })
 }
 
-export function fetchAssignments(classroomId: string) {
+// Fetch assignments by classroom
+export function fetchAssignments(classroomId: string): Promise<Assignment[]> {
   return fetch(`https://api.github.com/classrooms/${classroomId}/assignments`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -32,7 +33,21 @@ export function fetchAssignments(classroomId: string) {
   })
 }
 
-
+// Fetch submissions by assignment
+export function fetchSubmissions(assignmentId: string) {
+  return fetch(`https://api.github.com/assignments/${assignmentId}/accepted_assignments`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) 
+      throw new Error('Failed to fetch submissions');
+      
+    return response.json();
+  })
+}
 
 // Fetch file content from the Github API
 // If filePath is not passed, value from the .env is used
