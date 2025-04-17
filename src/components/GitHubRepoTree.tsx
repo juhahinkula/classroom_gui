@@ -4,12 +4,21 @@ import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { CircularProgress } from '@mui/material';
 import { fetchFileContent } from '../api';
 
-interface GithubRepoTreeProps {
+type GithubRepoTreeProps = {
   repoUrl: string;
+  repositoryName: string;
   setSourceCode: (code: string) => void;
 }
 
-interface TreeNode {
+type GithubNode = {
+  path: string,
+  mode: string,
+  type: string,
+  sha: string,
+  url: string,
+}
+
+type TreeNode = {
   id: string;
   name: string;
   path: string;
@@ -17,7 +26,7 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
+function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTreeProps) {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -45,7 +54,7 @@ function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
       });
     };
 
-    const buildTree = (nodes: any[]): TreeNode[] => {
+    const buildTree = (nodes: GithubNode[]): TreeNode[] => {
       const root: TreeNode[] = [];
       const map: { [key: string]: TreeNode } = {};
 
@@ -77,8 +86,7 @@ function GithubRepoTree({ repoUrl, setSourceCode }: GithubRepoTreeProps) {
   }, [repoUrl]);
 
     const getSourceCode = (codeUrl: string) => {
-      // TODO: Get repository name here
-      fetchFileContent("react-component-juhahinkula", codeUrl)
+      fetchFileContent(repositoryName, codeUrl)
       .then(data => {
         const content = atob(data.content);
         setSourceCode(content);

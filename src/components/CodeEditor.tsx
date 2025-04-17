@@ -17,13 +17,14 @@ type CodeEditorProps = {
   onClose: () => void;
   code: string;
   repositoryUrl: string;
+  repositoryName: string;
 }
 
-function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
+function CodeEditor({ open, onClose, code, repositoryUrl, repositoryName}: CodeEditorProps) {
   const [editorCode, setEditorCode] = useState(code);
   const [isHtmlMode, setIsHtmlMode] = useState(false);
   const [fileName, setFileName] = useState("student-code.tsx");
-
+ 
   useEffect(() => {
     setEditorCode(code);
   }, [code]);
@@ -85,6 +86,7 @@ function CodeEditor({ open, onClose, code, repositoryUrl}: CodeEditorProps) {
           <GithubRepoTree 
             repoUrl={repositoryUrl} 
             setSourceCode={setSourceCode}
+            repositoryName={repositoryName}
           />
           <CodeMirror
             value={editorCode}

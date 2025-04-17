@@ -19,6 +19,7 @@ export default function Submissions() {
 
   const [showCodeEditor, setShowCodeEditor] = useState(false);
   const [repositoryUrl, setRepositoryUrl] = useState("");
+  const [repositoryName, setRepositoryName] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const [path, setPath] = useState(import.meta.env.VITE_PATH_NAME);
 
@@ -85,8 +86,9 @@ export default function Submissions() {
           variant="text"
           size="small"
           onClick={() => {
-            getFileContent(params.row.repositoryName);
+            getFileContent(params.row.repositoryName, path);
             setRepositoryUrl(params.row.repository);
+            setRepositoryName(params.row.repositoryName);
             setShowCodeEditor(true);
           }}
         >
@@ -97,7 +99,9 @@ export default function Submissions() {
   ];
 
   function getFileContent(repo_name: string, filePath?: string) {  
-    if (filePath) {  
+    if (!filePath)
+      setStudentCode("Select a file to show");
+    else {
       fetchFileContent(repo_name, filePath)
       .then(data => {
         const content = atob(data.content);
@@ -108,7 +112,7 @@ export default function Submissions() {
         throw error;
       });
     }
-  }  
+    }  
 
   const closeCodeEditor = () => {
     setShowCodeEditor(false);
@@ -154,6 +158,7 @@ export default function Submissions() {
         onClose={closeCodeEditor} 
         code={studentCode}
         repositoryUrl={repositoryUrl}
+        repositoryName={repositoryName}
       />
     </div>
   );
