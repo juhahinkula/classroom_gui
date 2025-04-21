@@ -28,48 +28,40 @@ export default function Submissions() {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['assignments', assignmentId], 
     queryFn: () => fetchSubmissions(assignmentId),
-    select: (data) => {
-        const items = data.map(
-          (submission: SubmissionResponse) => ({
-            ...submission,
-            repository: submission.repository.html_url,
-            repositoryName: submission.repository.name,
-            studentName: submission.students && submission.students.length > 0 ? 
-                        submission.students[0].name : null,
-            studentLogin: submission.students && submission.students.length > 0 ? 
-                          submission.students[0].login : null
-          })
-        );
-        return items;
-      }  
   });  
 
   const columns: GridColDef[] = [
     { 
-      field: 'id', 
-      headerName: 'ID', 
-      width: 100 
-    },
-    { 
-      field: 'studentName', 
+      field: 'github_username', 
       headerName: 'Student', 
-      width: 190,
+      width: 150,
     },
     { 
-      field: 'studentLogin', 
-      headerName: 'Student login', 
-      width: 200,
+      field: 'roster_identifier', 
+      headerName: 'Roster ID', 
+      width: 150,
     },
+    {
+      field: 'submission_timestamp', 
+      headerName: 'Submitted', 
+      width: 180,
+    },
+    { 
+      field: 'points_awarded', 
+      headerName: 'Points', 
+      width: 80,
+    },
+
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 130,
+      width: 110,
       renderCell: (params) => (
         <Button
           variant="text"
           size="small"
           startIcon={<OpenInNewIcon />}
-          href={params.row.repository}
+          href={params.row.student_repository_url}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -80,15 +72,15 @@ export default function Submissions() {
     {
       field: 'actions2',
       headerName: 'Actions',
-      width: 120,
+      width: 110,
       renderCell: (params) => (
         <Button
           variant="text"
           size="small"
           onClick={() => {
-            getFileContent(params.row.repositoryName, path);
-            setRepositoryUrl(params.row.repository);
-            setRepositoryName(params.row.repositoryName);
+            getFileContent(params.row.student_repository_name, path);
+            setRepositoryUrl(params.row.student_repository_url);
+            setRepositoryName(params.row.student_repository_name);
             setShowCodeEditor(true);
           }}
         >
@@ -138,10 +130,11 @@ export default function Submissions() {
               onChange={event => setPath(event.target.value)}
             />
           </Stack>
-          <div style={{ height: 400, width: '90%' }}>
+          <div style={{ height: 400, width: '95%' }}>
             <DataGrid
               rows={data}
               columns={columns}
+              getRowId={data => data.student_repository_name}
               pageSizeOptions={[5, 10, 25]}
               initialState={{
                 pagination: {

@@ -35,7 +35,7 @@ export function fetchAssignments(classroomId: string): Promise<Assignment[]> {
 
 // Fetch submissions by assignment
 export function fetchSubmissions(assignmentId: string) {
-  return fetch(`https://api.github.com/assignments/${assignmentId}/accepted_assignments`, {
+  return fetch(`https://api.github.com/assignments/${assignmentId}/grades`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/vnd.github+json'
