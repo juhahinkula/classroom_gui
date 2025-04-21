@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
-import { CircularProgress } from '@mui/material';
 import { fetchFileContent } from '../api';
 
 type GithubRepoTreeProps = {
@@ -85,23 +84,30 @@ function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTr
     fetchRepoTree();
   }, [repoUrl]);
 
-    const getSourceCode = (codeUrl: string) => {
-      fetchFileContent(repositoryName, codeUrl)
-      .then(data => {
-        const content = atob(data.content);
-        setSourceCode(content);
-      })
-    }
+console.log(treeData)
+
+  const getSourceCode = (codeUrl: string) => {
+    setLoading(true);
+    fetchFileContent(repositoryName, codeUrl)
+    .then(data => {
+      const content = atob(data.content);
+      setSourceCode(content);
+    })
+    .finally(() => setLoading(false))
+  }
   
   const renderTree = (nodes: TreeNode[]) =>
     nodes.map((node) => (
-      <TreeItem onClick={() => getSourceCode(node.path)} key={node.path} itemId={node.path} label={node.name}>
+      <TreeItem onClick={() => {
+        if (node.type == "blob")
+          getSourceCode(node.path)
+      }} key={node.path} itemId={node.path} label={node.name}>
         {node.children && renderTree(node.children)}
       </TreeItem>
     ));
 
   if (loading) {
-    return <CircularProgress />;
+    setSourceCode("Loading...");  
   }
 
   return (
