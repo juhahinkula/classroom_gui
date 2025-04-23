@@ -16,7 +16,6 @@ import { Submission } from '../types';
 
 export default function Submissions() {
   const params = useParams();
-  const classroomId = params.classroomId as string;
   const assignmentId = params.assignmentId as string;
 
   const [showCodeEditor, setShowCodeEditor] = useState(false);
@@ -131,7 +130,7 @@ export default function Submissions() {
 
   return (
     <div className="submissions-container">   
-      <h3>Assignment Submissions: Classroom ID {classroomId} | Assignment {assignmentId} {data && data[0].assignment_name}</h3>
+      <h3>Assignment Submissions: {assignmentId} {data.length > 0 && data[0].assignment_name}</h3>
         
       {data.length === 0 ? (
         <p>No submissions found.</p>
