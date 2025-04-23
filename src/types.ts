@@ -1,10 +1,10 @@
 export type Classroom = {
-  id: number;
+  id: string;
   name: string;
   archived: boolean;
   url: string;
-  organization_name: string;
-  created_at: string;
+  organization_name?: string;
+  created_at?: string;
 }
 
 export type Assignment = {
