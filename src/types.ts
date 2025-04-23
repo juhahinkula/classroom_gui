@@ -10,9 +10,9 @@ export type Classroom = {
 export type Assignment = {
   id: string;
   title: string;
-  description: string;
-  dueDate: string;
-  createdAt: string;
+  deadline: string;
+  submissions: number;
+  classroom: Classroom;
 }
 
 export type Student = {
@@ -23,27 +23,15 @@ export type Student = {
   html_url: string
 }
 
-export type SubmissionResponse = {
-  id: number;
-  submitted: boolean;
-  passing: boolean;
-  commit_count: number;
-  grade: number | null;
-  students: Student[],
-  repository: {
-    id: number;
-    name: string;
-    full_name: string;
-    html_url: string;
-    private: boolean;
-    default_branch: string;
-  }
-}
-
 export type Submission = {
-  id: string;
-  repository: string;
-  repositoryName: string;
-  studentName: string;
-  studentLogin: string;
+  assignment_name: string;
+  assignment_url: string;
+  starter_code_url: string;
+  github_username: string;
+  roster_identifier: string;
+  student_repository_name: string;
+  student_repository_url: string;
+  points_awarded: string;
+  submission_timestamp: string;
+  points_available: string;
 }

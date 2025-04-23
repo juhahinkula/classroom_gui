@@ -12,6 +12,7 @@ import { fetchFileContent } from '../api';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSubmissions } from '../api';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { Submission } from '../types';
 
 export default function Submissions() {
   const params = useParams();
@@ -43,7 +44,7 @@ export default function Submissions() {
     );
   }  
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<Submission>[] = [
     { 
       field: 'github_username', 
       headerName: 'Student', 
@@ -130,7 +131,7 @@ export default function Submissions() {
 
   return (
     <div className="submissions-container">   
-      <h3>Assignment Submissions: Classroom ID {classroomId} | Assignment ID {assignmentId}</h3>
+      <h3>Assignment Submissions: Classroom ID {classroomId} | Assignment {assignmentId} {data && data[0].assignment_name}</h3>
         
       {data.length === 0 ? (
         <p>No submissions found.</p>

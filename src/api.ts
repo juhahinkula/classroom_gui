@@ -1,4 +1,4 @@
-import { Assignment, Classroom } from "./types";
+import { Assignment, Classroom, Submission } from "./types";
 
 const token = import.meta.env.VITE_GITHUB_TOKEN;
 
@@ -34,7 +34,7 @@ export function fetchAssignments(classroomId: string): Promise<Assignment[]> {
 }
 
 // Fetch submissions by assignment
-export function fetchSubmissions(assignmentId: string) {
+export function fetchSubmissions(assignmentId: string): Promise<Submission[]> {
   return fetch(`https://api.github.com/assignments/${assignmentId}/grades`, {
     headers: {
       'Authorization': `Bearer ${token}`,
