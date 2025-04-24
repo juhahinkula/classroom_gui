@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useParams, useNavigate } from 'react-router';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
@@ -27,7 +27,7 @@ function Assignments() {
       field: 'actions',
       headerName: 'Actions',
       width: 150,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           variant="text"
           size="small"

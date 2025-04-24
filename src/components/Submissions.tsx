@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DataGrid, GridColDef, Toolbar, ExportCsv, ToolbarButton } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, Toolbar, ExportCsv, ToolbarButton, GridRenderCellParams } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -88,7 +88,7 @@ export default function Submissions() {
       headerName: 'Actions',
       disableExport: true,
       width: 110,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           variant="text"
           size="small"

@@ -84,8 +84,6 @@ function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTr
     fetchRepoTree();
   }, [repoUrl]);
 
-console.log(treeData)
-
   const getSourceCode = (codeUrl: string) => {
     setLoading(true);
     fetchFileContent(repositoryName, codeUrl)

@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import Button  from '@mui/material/Button';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useNavigate } from 'react-router';
@@ -34,7 +34,7 @@ function Classrooms() {
       field: 'actions',
       headerName: 'Actions',
       width: 120,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           variant="text"
           size="small"
