@@ -27,7 +27,6 @@ type TreeNode = {
 
 function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTreeProps) {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRepoTree = () => {
@@ -48,9 +47,6 @@ function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTr
       .catch((error) => {
         console.error('Error fetching repository tree:', error);
       })
-      .finally(() => {
-        setLoading(false);
-      });
     };
 
     const buildTree = (nodes: GithubNode[]): TreeNode[] => {
@@ -85,13 +81,13 @@ function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTr
   }, [repoUrl]);
 
   const getSourceCode = (codeUrl: string) => {
-    setLoading(true);
+    setSourceCode("Loading...");
     fetchFileContent(repositoryName, codeUrl)
     .then(data => {
       const content = atob(data.content);
       setSourceCode(content);
     })
-    .finally(() => setLoading(false))
+    .catch(() => setSourceCode("Error in fetching source code"))
   }
   
   const renderTree = (nodes: TreeNode[]) =>
