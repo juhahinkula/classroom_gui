@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/juhahinkula/classroom_gui/actions/workflows/node.js.yml/badge.svg)](https://github.com/juhahinkula/classroom_gui/actions/workflows/node.js.yml)
+
 # GUI for Github Classroom 
 
 GUI for teachers to display classrooms, assignments, and student submissions. 
