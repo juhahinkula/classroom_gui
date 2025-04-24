@@ -104,10 +104,6 @@ function GithubRepoTree({ repoUrl, repositoryName, setSourceCode }: GithubRepoTr
       </TreeItem>
     ));
 
-  if (loading) {
-    setSourceCode("Loading...");  
-  }
-
   return (
     <SimpleTreeView>
       {renderTree(treeData)}
