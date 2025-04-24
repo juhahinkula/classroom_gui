@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { DataGrid, GridColDef, Toolbar, ExportCsv, ToolbarButton, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CodeEditor from './CodeEditor';
 import { useNavigate } from "react-router";
 import { fetchFileContent } from '../api';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSubmissions } from '../api';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Submission } from '../types';
+import CustomToolbar from './CustomToolbar';
 
 export default function Submissions() {
   const params = useParams();
@@ -30,18 +29,6 @@ export default function Submissions() {
     queryKey: ['assignments', assignmentId], 
     queryFn: () => fetchSubmissions(assignmentId),
   });  
-
-  function CustomToolbar() {
-    return (
-      <Toolbar>
-        <Tooltip title="Download as CSV">
-          <ExportCsv render={<ToolbarButton />}>
-            <FileDownloadIcon fontSize="small" />
-          </ExportCsv>
-        </Tooltip>
-      </Toolbar>
-    );
-  }  
 
   const columns: GridColDef<Submission>[] = [
     { 
@@ -70,7 +57,7 @@ export default function Submissions() {
       headerName: 'Actions',
       disableExport: true,
       width: 110,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           variant="text"
           size="small"

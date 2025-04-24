@@ -5,6 +5,7 @@ import App from './App.tsx'
 import Classrooms from './components/Classrooms.tsx';
 import Assignments from './components/Assignments.tsx';
 import Submissions from './components/Submissions.tsx';
+import ClassReport from './components/ClassReport.tsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -13,19 +14,24 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: [                       // children are nested routes with a route
+    children: [
       {
         element: <Classrooms />,
-        index: true                   // index route does not need any path
+        index: true
       },
       {
-        path: "assignments/:classroomId",                // path can be defined relative to the parent path
+        path: "assignments/:classroomId", 
         element: <Assignments />,
       },
       {
         path: "submissions/:classroomId/:assignmentId",
         element: <Submissions />,
       },
+      {
+        path: "report/:classroomId",
+        element: <ClassReport />,
+      },
+
     ]
   },
 ]);

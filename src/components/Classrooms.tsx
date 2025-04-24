@@ -60,6 +60,20 @@ function Classrooms() {
              Assignments
         </Button>
       )
+    },
+    {
+      field: 'actions3',
+      headerName: 'Actions',
+      width: 130,
+      renderCell: (params) => (
+        <Button
+             variant="text"
+             size="small"
+             onClick={() => navigate(`/report/${params.row.id}`)}
+           >
+             Report
+        </Button>
+      )
     }
   ];
 
