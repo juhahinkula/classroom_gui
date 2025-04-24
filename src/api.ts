@@ -57,8 +57,6 @@ export function fetchFileContent(repo_name: string, filePath?: string) {
   const pathToFetch = filePath || import.meta.env.VITE_PATH_NAME;
   const url = `https://api.github.com/repos/${owner}/${repo_name}/contents/${pathToFetch}?ref=${branch}`;
   
-  console.log(url);
-
   return fetch(url, 
     { 
       headers: {
