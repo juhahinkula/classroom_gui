@@ -4,10 +4,6 @@
 
 GUI for teachers to display classrooms, assignments, and student submissions. 
 
-### Features to Improve:
-- Dynamically fetch the organization name from the GitHub API instead of relying on the `.env` file.
-- Error handling for invalid or expired GitHub tokens.
-
 ## Getting Started
 
 ### Install dependencies
@@ -15,7 +11,9 @@ GUI for teachers to display classrooms, assignments, and student submissions.
 npm install
 ```
 ### Create Github token
-Use fine-grained personal access token: [https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token]
+If your classroom contains private repositories then create a personal Github token (classic). Select *Full control of private repositroies* from Select scopes. Read instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic).
+
+Otherwise, you can Use fine-grained personal access token. Read instructions [here] (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
 
 ### Create .env file
 Create `.env` file to the project root and add the following env variables:
