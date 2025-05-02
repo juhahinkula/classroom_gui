@@ -11,9 +11,9 @@ GUI for teachers to display classrooms, assignments, and student submissions.
 npm install
 ```
 ### Create Github token
-If your classroom contains private repositories then create a personal Github token (classic). Select *Full control of private repositroies* from Select scopes. Read instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic).
+If your classroom uses private repositories, generate a classic personal GitHub token. When setting the scopes, choose *Full control of private repositories*. For detailed steps, see the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic).
 
-Otherwise, you can Use fine-grained personal access token. Read instructions [here] (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+Otherwise, you can Use fine-grained personal access token. See the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
 
 ### Create .env file
 Create `.env` file to the project root and add the following env variables:
