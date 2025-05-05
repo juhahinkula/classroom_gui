@@ -1,5 +1,5 @@
 export const createHtmlCode = (sourceCode: string): string => {
-  const componentCode = removeImportsAndExports(sourceCode);
+  const componentCode = sanitizeReactComponentSource(sourceCode);
 
   const htmlCode = `
     <!DOCTYPE html>
@@ -28,13 +28,21 @@ export const createHtmlCode = (sourceCode: string): string => {
     return htmlCode;
 };
 
-function removeImportsAndExports(sourceCode: string): string {
+/*
+/ Sanitize React component code to work in HTML 
+*/
+function sanitizeReactComponentSource(sourceCode: string): string {
   const importExportRegex = /^import\s+.*?($|;)|^(import|export)\s+.*from\s+['"].*['"];?|^export\s+default\s+\w+;?|^export\s+{[^}]*};?/gm;
-  let cleanedCode = sourceCode.replace(importExportRegex, '');
-  cleanedCode = cleanedCode.replace('<>', '<div>');
-  cleanedCode = cleanedCode.replace('</>', '</div>');
+  let sanitizedCode = sourceCode.replace(importExportRegex, '');
+  sanitizedCode = sanitizedCode.replace('<>', '<div>');
+  sanitizedCode = sanitizedCode.replace('</>', '</div>');
 
-  return cleanedCode.trim();
+  sanitizedCode = sanitizedCode.replace(
+    /\b(useState|useEffect|useRef|useContext)\b/g,
+    'React.$1'
+  );
+
+  return sanitizedCode.trim();
 }
 
 import ts from 'typescript';
