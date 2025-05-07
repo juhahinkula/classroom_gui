@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { javascript, typescriptLanguage } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { createHtmlCode, transpileTsxToJsx } from '../utils';
 import SaveIcon from '@mui/icons-material/Save';
@@ -30,7 +30,7 @@ function CodeEditor({ open, onClose, code, repositoryUrl, repositoryName}: CodeE
   }, [code]);
 
   const getHtmlCode = () => {
-    // Check if the code is ts !!!!
+    // Add check if the file is TypeScript
     const transpiledCode = transpileTsxToJsx(code);
   
     const htmlCode = createHtmlCode(transpiledCode);

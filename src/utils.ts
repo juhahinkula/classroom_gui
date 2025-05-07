@@ -54,7 +54,7 @@ export function transpileTsxToJsx(sourceCode: string): string {
       target: ts.ScriptTarget.ESNext,
       module: ts.ModuleKind.ESNext,
     },
-    fileName: 'component.tsx', // Default filename for error reporting
+    fileName: 'component.tsx',
   });
 
   return result.outputText;
