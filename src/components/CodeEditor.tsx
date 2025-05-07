@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript, typescriptLanguage } from '@codemirror/lang-javascript';
+import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { createHtmlCode, transpileTsxToJsx } from '../utils';
 import SaveIcon from '@mui/icons-material/Save';
