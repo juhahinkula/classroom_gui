@@ -13,6 +13,7 @@ export type Assignment = {
   deadline: string;
   submissions: number;
   classroom: Classroom;
+  invite_link?: string;
 }
 
 export type Student = {

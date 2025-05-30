@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAssignments } from '../api';
+import { Assignment } from '../types';
 
 function Assignments() {
   const { classroomId } = useParams<{ classroomId: string }>();
@@ -45,18 +46,17 @@ function Assignments() {
   // Download invitation links as CSV
   const handleDownloadCsv = () => {
     if (!data || data.length === 0) return;
-    type AssignmentWithInvite = typeof data[number] & { invitation_url?: string; invite_link?: string };
-    type CsvRow = { Title: string; InvitationLink: string };
-    const rows: CsvRow[] = (data as AssignmentWithInvite[])
+    type CsvRow = { Assignment: string; InvitationLink: string };
+    const rows: CsvRow[] = (data as Assignment[])
       .map((a) => ({
-        Title: a.title,
-        InvitationLink: a.invitation_url || a.invite_link || ''
+        Assignment: a.title ?? '',
+        InvitationLink: a.invite_link ?? ''
       }))
-      .sort((a, b) => a.Title.localeCompare(b.Title));
+      .sort((a, b) => a.Assignment.localeCompare(b.Assignment));
     const header = ["Assignment", "InvitationLink"];
     const csv = [
       header.join(','),
-      ...rows.map(row => header.map(h => `"${row[h as keyof CsvRow].replace(/"/g, '""')}"`).join(','))
+      ...rows.map(row => header.map(h => `"${(row[h as keyof CsvRow] ?? '').replace(/"/g, '""')}"`).join(','))
     ].join('\r\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
